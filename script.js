@@ -33,6 +33,7 @@ let userLists = [{
     update_at:" 2024-01-5 13:15:17",
     create_at:" 2024-10-05 13:21:17",
 }]
+let update=null
 let storage=localStorage['usersList']
 if(storage){
     userLists=JSON.parse(storage)
@@ -55,6 +56,14 @@ formData.onsubmit = function (e) {
     for (let i = 0; i < values.length; i++) {
         if (values[i].name === 'uid') {
             userList[values[i].name] = Date.now()
+        }else if(values[i].name === 'agree'){
+
+            if(values[i].checked){
+                userList[values[i].name]='on'
+            }else{
+                userList[values[i].name]='off'
+            }
+
         } else {
             let val=values[i].value
             if(val.length){
@@ -98,7 +107,23 @@ function add(element){
 
         li.setAttribute('class','list-group-item list-group-item-action d-flex align-items-center justify-content-between')
 
-        li.innerHTML=`<span class="item-text" id="uniq-${element.uid}">${element.name} ${element?.create_at} ${element?.update_at} </span>`
+        li.innerHTML=`<span class="item-text" id="uniq-${element.uid}"> ${element.update_at?element.update_at:element.create_at??''}  </span>`
+
+    li.innerHTML+=`
+        <ul class="list-group">
+        <li>FullName: ${element.name} ${element.lastName}</li>
+        <li>email: ${element.email}</li>
+        <li> psw: ${element.psw}</li>
+        <li> address: ${element.address}</li>
+        <li> address2: ${element.address2}</li>
+        <li> city: ${element.city}</li>
+        <li> state: ${element.state}</li>
+        <li> index: ${element.index}</li>
+        <li> agree: ${element.agree}</li>
+    
+        </ul>
+    
+    `
             // create Div
         let dv=document.createElement('div')
             // create edit button
@@ -124,21 +149,38 @@ function add(element){
     btnDelete.onclick=function (){
         userLists=userLists.filter(res=>res.uid!==element.uid)
         li.remove()
+        update=null
+        mybtn.innerHTML='Add new item'
+        formData.reset()
         localStorage['usersList']=JSON.stringify(userLists)
     }
     // _________Edit______________
     btnEdit.onclick=function (){
-       update=element
+            let new_element=userLists.find(res=>res.uid===element.uid)
+       update=new_element
         mybtn.innerHTML='update'
         let value=formData.elements
         for(let i=0;i<value.length;i++){
-           let valname=value[i].name
-            value[i].value=element[valname]
+
+                if(value[i].name==='agree'){
+                    if(update.agree==='on'){
+                        value[i].checked =true
+                    }
+
+                }
+                    let valname = value[i].name
+                    value[i].value = new_element[valname]
+
+
+
+
+
         }
     }
 
 }
 function updateValue(oldValue,newValue){
+    console.log(newValue)
     let date=new Date()
 
     let time=   `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
@@ -154,10 +196,27 @@ function updateValue(oldValue,newValue){
        }
        return res
    })
+
     let text=document.querySelector('#uniq-'+oldValue.uid)
-    text.innerText=`${newValue.name} ${oldValue?.create_at} ${time}`
+    let ulInfo=document.querySelector(`#uniq-${oldValue.uid}`).parentElement.querySelector('ul')
+    console.log(ulInfo,'dddd')
+    text.innerText=`  ${time}`
+    ulInfo.innerHTML=`
+   
+            <li>FullName: ${newValue.name} ${newValue.lastName}</li>
+            <li>email: ${newValue.email}</li>
+            <li> psw: ${newValue.psw}</li>
+            <li> address: ${newValue.address}</li>
+            <li> address2: ${newValue.address2}</li>
+            <li> city: ${newValue.city}</li>
+            <li> state: ${newValue.state}</li>
+            <li> index: ${newValue.index}</li>
+            <li> agree: ${newValue.agree}</li>
+    
+ 
+    `
     update=null
     mybtn.innerHTML='Add new item'
     localStorage['usersList']=JSON.stringify(userLists)
-
+    console.log(userLists)
 }
