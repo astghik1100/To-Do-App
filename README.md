@@ -1,18 +1,20 @@
 <div align="center">
 
+<h2 align="center">To-Do App</h2>
 
-<h2 align="center">To-Do-App</h2>
-
-
-<a href="https://github.com/astghik1100/To-Do-App"><strong>➥ Live Demo</strong></a>
+<a href="https://astghik1100.github.io/To-Do-App">
+<strong>➥ Live Demo</strong></a>
 
 </div>
 
 <br />
 
-### Demo Screeshots
+### Demo Screenshots
 
-![VAST Desktop Demo](./img.png "Desktop Demo")
+![To-Do App Desktop Demo](./img.jpg "Desktop Demo")
+
+This is a To-Do List application that allows you to easily manage your tasks. You can add, delete, and edit tasks as needed. It supports localStorage, ensuring that all your changes will be saved even after refreshing or closing the page.
+
 
 ### Prerequisites
 
